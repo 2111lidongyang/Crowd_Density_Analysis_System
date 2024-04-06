@@ -24,8 +24,4 @@
 我们小组实现了系统原型设计中视频检测、摄像头检测的核心功能,
 包括实时监控、人流密度过高提醒、人流数据的增删改查、系统用户权限设置等功能。
 （web前后端代码体现在sever.py、detect_web.py，主要基于Flask实现）
-![image] (https://github.com/2111lidongyang/Crowd_Density_Analysis_System/blob/main/img/img.png)
-![image] (https://github.com/2111lidongyang/Crowd_Density_Analysis_System/blob/main/img/img_1.png)
-![image] (https://github.com/2111lidongyang/Crowd_Density_Analysis_System/blob/main/img/img_2.png)
-![image] (https://github.com/2111lidongyang/Crowd_Density_Analysis_System/blob/main/img/img_3.png)
-![image] (https://github.com/2111lidongyang/Crowd_Density_Analysis_System/blob/main/img/img_4.png)
+![人群密度分析数据统计](https://github.com/2111lidongyang/Crowd_Density_Analysis_System/blob/main/img/img.png)
