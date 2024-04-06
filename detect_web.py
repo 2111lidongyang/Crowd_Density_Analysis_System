@@ -153,7 +153,7 @@ class VideoCamera(object):
                 jpeg, jpeg_hm, ori_shape, person_count = self.detect(frame)
                 if self.num == 10:
 
-                    db, cursor = create_db(host='43.143.229.40', password='team2111..', database='person',
+                    db, cursor = create_db(host='127.0.0.1', password='xxx', database='person',
                                            user='root', port=3306)
                     current_time = datetime.now()
                     # 格式化当前时间为 "YYYY-MM-DD HH:MM:SS" 的形式
