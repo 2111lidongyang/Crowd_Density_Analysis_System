@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>人流管理</title>
+  <!-- 字体图标 -->
+  <link rel="stylesheet" href="https://at.alicdn.com/t/c/font_3736758_vxpb728fcyh.css">
+  <!-- 引入bootstrap.css -->
+  <link href="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/5.2.3/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body>
+  <!-- 导航栏 -->
+  <div class="top">
+    <div class="wrapper">
+      <div class="logo">
+        <!-- 首页 -->
+        <h1><a href="#">智能人流分析系统</a></h1>
+      </div>
+      <div class="middle">
+        <div class="txt">
+          <span class="title"><a href='{{ url_for("show_web") }}'>首页</a></span>
+        </div>
+        <div class="txt">
+          <span class="title "><a href='{{ url_for("manager_data") }}'>数据管理</a></span>
+        </div>
+        <div class="txt">
+          <span class="title"><a href='{{ url_for("show_data") }}' class="active">数据分析</a></span>
+        </div>
+        <div class="txt">
+          <span class="title"><a class="Manage" href='{{ url_for("usermanager") }}'>人员管理</a></span>
+        </div>
+      </div>
+      <div class="right">
+        <!-- 管理员入口 -->
+        <!-- <span class="manager"><a href="#">管理入口</a></span> -->
+        <!-- 会议主持人入口 -->
+        <div class="host"><a href='{{ url_for("login") }}'>退出登录</a></div>
+      </div>
+    </div>
+  </div>
+  <!-- 主体区域 -->
+  <div class="charts">
+    <div id="main" style="width: 1200px;height:600px;"></div>
+    <div class="minor">
+      <div class="average">近5日平均人数：</div>
+      <div class="current">当前人数：</div>
+    </div>
+  </div>
+  <style>
+    .average {
+      width: 200px;
+      height: 60px;
+      border-radius: 10px;
+      margin-left: 100px;
+      margin-top: 200px;
+      background-color: #fff;
+      line-height: 60px;
+    }
+
+    .current {
+      width: 200px;
+      height: 60px;
+      border-radius: 10px;
+      margin-left: 100px;
+      margin-top: 100px;
+      background-color: #fff;
+      line-height: 60px;
+    }
+
+
+    .charts {
+      margin-top: 100px;
+      display: flex;
+    }
+
+    .minor {
+      width: 400px;
+      height: 600px;
+      /* background-color: pink; */
+    }
+
+    /* 公共*/
+    html,
+    body {
+      width: 100%;
+      height: 100%;
+    }
+
+    .container {
+      width: 1340px;
+      margin: 0 auto;
+      padding-top: 60px;
+      box-sizing: border-box;
+    }
+
+    /* alert提示框 */
+    .toast {
+      position: fixed;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    .toast .toast-body {
+      padding: 0 !important;
+    }
+
+    .toast .alert-success {
+      margin-bottom: 0 !important;
+    }
+
+    /* 头部导航 */
+    .container .top {
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .container .top h3 {
+      font-weight: 900;
+    }
+
+    .container .top .plus-btn {
+      background-color: #539ACB !important;
+      color: #fff;
+      border: none;
+    }
+
+    /* 表格部分 */
+    .table {
+      margin-top: 20px;
+      text-align: center;
+      font-size: 14px;
+    }
+
+    .table-light th {
+      background-color: #939CA7 !important;
+      color: #ffffff;
+      font-family: PingFangSC-Medium;
+      font-size: 16px;
+      text-align: center;
+      font-weight: 500;
+      border-right: 1px solid lightgray;
+    }
+
+    .table-light th:last-of-type {
+      border-right: none;
+    }
+
+    /* 表格内容 */
+    .table tbody td {
+      color: #696F77;
+    }
+
+    .table .del {
+      color: #E5964C;
+      margin-right: 30px;
+    }
+
+    .table .edit {
+      color: #539ACB;
+    }
+
+    .table tbody tr {
+      height: 30px;
+      line-height: 30px;
+    }
+
+    .table tbody tr td:last-of-type span {
+      cursor: pointer;
+    }
+
+    /* 弹出层 */
+    .modal .top {
+      display: flex;
+      justify-content: center;
+      background-color: #F0F3F7;
+      padding: 15px 0;
+      width: 100%;
+      position: relative;
+      color: #1E2023;
+    }
+
+    /* 右上角-关闭按钮 */
+    .modal .btn-close {
+      font-size: 12px;
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      right: 23px;
+      /* 覆盖bootstrap样式 */
+      margin: 0;
+      padding: 0;
+    }
+
+    /* 表单容器 */
+    .form-wrap {
+      box-sizing: border-box;
+      background-color: white;
+      padding: 40px;
+    }
+
+    .form-wrap .form-label {
+      color: #696F77;
+    }
+
+    /* 修改输入框默认占位文字
+    webkit内核, firefox18-, firfox19+, 其他
+    */
+    .form-wrap input::-webkit-input-placeholder {
+      color: #BFBFBF !important;
+      font-size: 14px;
+    }
+
+
+    /* 底部按钮组 */
+    .modal-footer {
+      border-top: 0;
+    }
+
+    .btn-group {
+      text-align: center;
+      width: 100%;
+    }
+
+    /* 修改bs的按钮弹性布局-改成自己设置大小 */
+    .btn-group,
+    .btn-group-vertical {
+      display: block;
+    }
+
+    .btn-group button {
+      width: 120px
+    }
+
+    .btn-group button:first-of-type {
+      border: 1px solid #E3E3E3;
+      background-color: #fff;
+      color: black;
+      margin-right: 60px;
+    }
+
+    .btn-group button:last-of-type {
+      background-color: #539ACB;
+    }
+
+    .alert-success {
+      border-color: transparent;
+    }
+
+    .toast {
+      border: none;
+    }
+
+    /* 主页背景色 */
+    body {
+      background-color: #f3f5f7;
+    }
+
+    .top {
+      background-color: #fff;
+    }
+
+    /* 导航栏 */
+    .wrapper {
+      display: flex;
+      margin: 0 auto;
+      width: 1200px;
+      height: 100px;
+      align-items: center;
+      /* background-color: #fff; */
+      justify-content: space-between;
+    }
+
+    /* logo  */
+    .top .logo {
+      width: 400px;
+      height: 100px;
+      text-align: center;
+      line-height: 100px;
+
+    }
+
+    .top .logo h1 a {
+      color: #4087f7;
+      font-size: 32px;
+      line-height: 100px;
+    }
+
+    /* 中间内容 */
+    .middle {
+      display: flex;
+      text-align: center;
+      line-height: 100px;
+      font-size: 20px;
+      color: #333;
+    }
+
+    .middle .txt {
+      height: 100px;
+      /* background-color: aquamarine; */
+    }
+
+    .middle .txt .title {
+      margin: 0 16px;
+    }
+
+
+    .middle .txt .title .active,
+    .middle .txt .title a:hover {
+      color: #1890ff;
+      border-bottom: 2px solid #00a4ff;
+    }
+
+    /* 入口 */
+    .right {
+      width: 152px;
+      height: 42px;
+      display: flex;
+      font-size: 16px;
+      text-align: center;
+      line-height: 42px;
+    }
+
+    /* 管理入口 */
+    .right span {
+      margin-right: 24px;
+    }
+
+    .right span a:hover {
+      color: #4087f7;
+    }
+
+    /* 登录 */
+    .right .host {
+      width: 128px;
+      background-color: #1890ff;
+      border-radius: 8px;
+    }
+
+    .right .host a {
+      color: #fff;
+    }
+
+    .right .host:hover {
+      background-color: #4087f7;
+    }
+
+    *,
+    ::after,
+    ::before {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        PingFangSC-Regular,
+        "PingFang SC",
+        "Microsoft YaHei",
+        "Helvetica Neue",
+        Helvetica,
+        Arial,
+        sans-serif;
+      font-size: 14px;
+      color: #40404c;
+    }
+
+    a {
+      color: #40404c;
+      text-decoration: none;
+    }
+
+    a:hover {
+      color: #fc5832;
+    }
+
+    ul {
+      list-style: none;
+    }
+
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6,
+    ul,
+    ol,
+    p {
+      padding: 0;
+      margin: 0;
+    }
+
+    .container {
+      width: 1080px;
+      margin: 0 auto;
+    }
+
+    button,
+    input {
+      resize: none;
+    }
+  </style>
+</body>
+<script src="{{ url_for('static',filename='js/echars.js') }}"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/axios/1.2.0/axios.min.js"></script>
+<script type="text/javascript">
+
+  document.querySelector('.Manage').addEventListener('click', (event) => {
+    const value = localStorage.getItem("identity")
+    console.log(value)
+    if (value === '1') {
+      alert('没有权限')
+      event.preventDefault(); // 阻止默认行为（跳转）
+    }
+  })
+
+  axios({
+    url: 'https://www.ydtloan.com/person/data/statistics',
+    method: 'GET'
+  }).then((res) => {
+    console.log(res)
+    var data = res.data.data.table1
+    document.querySelector('.average').innerText = '近五日平均人数：' + res.data.data.table2[0]
+    document.querySelector('.current').innerText = '当前人数：' + res.data.data.table2[1]
+    console.log(data)
+    // myChart.setOption(option);
+
+    // 提取日期和人数
+    var dates = data.map(item => item[0])
+    var counts = data.map(item => item[1])
+
+    // 更新ECharts的配置项
+    var option = {
+      title: {
+        text: '人流分析'
+      },
+      tooltip: {},
+      legend: {
+        data: ['人数']
+      },
+      xAxis: {
+        data: dates
+      },
+      yAxis: {},
+      series: [
+        {
+          name: '人数',
+          type: 'bar',
+          data: counts
+        }
+      ]
+    }
+
+    // 使用新的配置项更新图表
+    myChart.setOption(option);
+  })
+
+  // 基于准备好的dom，初始化echarts实例
+  var myChart = echarts.init(document.getElementById('main'));
+
+
+  // 使用刚指定的配置项和数据显示图表。
+  // myChart.setOption(option);
+</script>
+
+</html>

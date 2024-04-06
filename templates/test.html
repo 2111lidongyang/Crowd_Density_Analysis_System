@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Display Image and Person Count</title>
+</head>
+<body>
+    <h1>Display Image and Person Count</h1>
+
+    <script>
+        fetch('/video_feed')
+            .then(response => response.text())
+            .then(data => {
+                let responseData = data.split('\r\n\r\n');
+                let imagePart = responseData[1];
+                let personCount = responseData[2].split(':')[1].trim();
+
+                // Print personCount to console
+                console.log('Person Count:', personCount);
+
+                // Create an img element to display the image
+                let imgElement = document.createElement('img');
+                imgElement.src = 'data:image/jpeg;base64,' + btoa(imagePart);
+                document.body.appendChild(imgElement);
+            });
+    </script>
+</body>
+</html>
