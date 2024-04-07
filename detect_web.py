@@ -11,6 +11,11 @@ from matplotlib.colors import LinearSegmentedColormap
 from scipy.ndimage import gaussian_filter
 from datetime import datetime
 
+"""
+这是一个人群检测的类，主要需要修改的就是数据上传数据库部分，其他位置不需要修改
+1、数据库修改为自己的本地数据库：第160行开始改你的数据库
+"""
+
 
 class VideoCamera(object):
     def __init__(self, video_path=None, image_path=None, _camera=False, _image=False, _video=False):
@@ -149,11 +154,13 @@ class VideoCamera(object):
                 if not ret:
                     # self.__del__()
                     break
-
                 jpeg, jpeg_hm, ori_shape, person_count = self.detect(frame)
                 if self.num == 10:
-
-                    db, cursor = create_db(host='127.0.0.1', password='xxx', database='person',
+                    #  这里是将人群密度分析的出的结果上传到数据库中
+                    """
+                    改这里就好了，其他的不要动
+                    """
+                    db, cursor = create_db(host='127.0.0.1', password='你的密码', database='person',
                                            user='root', port=3306)
                     current_time = datetime.now()
                     # 格式化当前时间为 "YYYY-MM-DD HH:MM:SS" 的形式

@@ -5,8 +5,13 @@ from detect_web import VideoCamera
 app = Flask(__name__)
 cors = flask_cors.CORS(app, resources={r"/getMsg": {"origins": "*"}})  # 解决跨域问题,vue请求数据时能用上
 
+"""
+运行这个server.py文件就可以将整个人群密度分析的后台启动，但是前提是FastAPI后端服务必须启动运行
+注意，这个代码不要改！！！
+"""
 
-@app.route('/show_web')  # 现场画面
+
+@app.route('/show_web')  # 现场画面界面
 def show_web():
     return render_template('home.html')
 

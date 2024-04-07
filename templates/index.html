@@ -491,7 +491,7 @@
     function getBooksList() {
       // 1.1 获取数据
       axios({
-        url: 'https://www.ydtloan.com/person/data/get',
+        url: 'http://127.0.0.1:8000/person/data/get',
         method: 'GET'
       }).then(res => {
         console.log(res)
@@ -535,7 +535,7 @@
       console.log(data)
       // 提交到服务器
       axios({
-        url: 'https://www.ydtloan.com/person/data/find',
+        url: 'http://127.0.0.1:8000/person/data/find',
         method: 'POST',
         data: {
           data
@@ -582,7 +582,7 @@
         console.log(theId)
         // 3.2 调用删除接口
         axios({
-          url: 'https://www.ydtloan.com/person/data/del',
+          url: 'http://127.0.0.1:8000/person/data/del',
           method: 'DELETE',
           data: {
             data_id: theId
@@ -596,7 +596,7 @@
 
     document.querySelector('.xiaZai').addEventListener('click', () => {
       axios({
-        url: 'https://www.ydtloan.com/person/data/getdatalist',
+        url: 'http://127.0.0.1:8000/person/data/getdatalist',
         method: 'GET',
 
       }).then((res) => {

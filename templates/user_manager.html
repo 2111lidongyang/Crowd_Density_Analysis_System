@@ -476,7 +476,7 @@
     function getBooksList() {
       // 1.1 获取数据
       axios({
-        url: 'https://www.ydtloan.com/person/data/getuserdata',
+        url: 'http://127.0.0.1:8000/person/data/getuserdata',
         method: 'GET'
       }).then(res => {
         console.log(res)
@@ -532,7 +532,7 @@
         // 3.2 调用删除接口
         const user_name = `'${theId}'`
         axios({
-          url: `https://www.ydtloan.com/person/data/deluserdata?user_name=${user_name}`,
+          url: `http://127.0.0.1:8000/person/data/deluserdata?user_name=${user_name}`,
           method: 'DELETE',
         }).then((res) => {
           // 3.3 刷新图书列表
@@ -549,7 +549,7 @@
         // 3.2 调用删除接口
         const user_name = `'${theId}'`
         axios({
-          url: `https://www.ydtloan.com/person/data/updateuser?user_name=${user_name}`,
+          url: `http://127.0.0.1:8000/person/data/updateuser?user_name=${user_name}`,
           method: 'POST',
         }).then((res) => {
           // 3.3 刷新图书列表
@@ -592,7 +592,7 @@
       const user_class = selectedValue
       // 提交到服务器
       axios({
-        url: 'https://www.ydtloan.com/person/user/Register',
+        url: 'http://127.0.0.1:8000/person/user/Register',
         method: 'POST',
         data: {
           user_name,
